@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { UserManager, User } from 'oidc-client';
-import { Constants } from '../constants';
-import { Subject } from 'rxjs';
-import { CoreModule } from './core.module';
-import { HttpClient } from '@angular/common/http';
-import { AuthContext } from '../model/auth-context';
+import { Injectable } from "@angular/core";
+import { UserManager, User } from "oidc-client";
+import { Constants } from "../constants";
+import { Subject } from "rxjs";
+import { CoreModule } from "./core.module";
+import { HttpClient } from "@angular/common/http";
+import { AuthContext } from "../model/auth-context";
 
 @Injectable()
 export class AuthService {
@@ -20,8 +20,8 @@ export class AuthService {
       authority: Constants.stsAuthority,
       client_id: Constants.clientId,
       redirect_uri: `${Constants.clientRoot}signin-callback`,
-      scope: 'openid profile projects-api',
-      response_type: 'code',
+      scope: "openid profile projects-api",
+      response_type: "code", // defines the flow to use: code => Authorization Code flow
       post_logout_redirect_uri: `${Constants.clientRoot}signout-callback`,
       automaticSilentRenew: true,
       silent_redirect_uri: `${Constants.clientRoot}assets/silent-callback.html`
@@ -45,7 +45,6 @@ export class AuthService {
         this._loginChangedSubject.next(!!user && !user.expired);
       }
     });
-
   }
 
   login() {
@@ -88,24 +87,20 @@ export class AuthService {
     return this._userManager.getUser().then(user => {
       if (!!user && !user.expired) {
         return user.access_token;
-      }
-      else {
+      } else {
         return null;
       }
     });
   }
 
   loadSecurityContext() {
-    this._httpClient
-      .get<AuthContext>(`${Constants.apiRoot}Projects/AuthContext`)
-      .subscribe(
-        context => {
-          this.authContext = new AuthContext();
-          this.authContext.claims = context.claims;
-          this.authContext.userProfile = context.userProfile;
-        },
-        error => console.error(error)
-      );
+    this._httpClient.get<AuthContext>(`${Constants.apiRoot}Projects/AuthContext`).subscribe(
+      context => {
+        this.authContext = new AuthContext();
+        this.authContext.claims = context.claims;
+        this.authContext.userProfile = context.userProfile;
+      },
+      error => console.error(error)
+    );
   }
-
 }
