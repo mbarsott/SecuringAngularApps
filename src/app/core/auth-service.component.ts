@@ -24,7 +24,7 @@ export class AuthService {
       response_type: "code", // defines the flow to use: code => Authorization Code flow
       post_logout_redirect_uri: `${Constants.clientRoot}signout-callback`,
       automaticSilentRenew: true,
-      silent_redirect_uri: `${Constants.clientRoot}assets/silent-callback.html`
+      silent_redirect_uri: `${Constants.clientRoot}assets/silent-callback.html`,
       // metadata: {
       //   issuer: `${Constants.stsAuthority}`,
       //   authorization_endpoint: `${Constants.stsAuthority}authorize?audience=projects-api`,
